@@ -5,3 +5,4 @@ POSTGRES_PORT=5432
 POSTGRES_DB=challenge_ocelot
 POSTGRES_USER=debug
 POSTGRES_PASSWORD=debug
+DATABASE_URL=postgresql://debug:debug@postgres:5432/challenge_ocelot

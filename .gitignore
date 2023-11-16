@@ -164,28 +164,28 @@ typings/
 # Provided default Pycharm Run/Debug Configurations should be tracked by git
 # In case of local modifications made by Pycharm, use update-index command
 # for each changed file, like this:
-# git update-index --assume-unchanged challenge_ocelot/.idea/challenge_ocelot.iml
+# git update-index --assume-unchanged .idea/challenge_ocelot.iml
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-challenge_ocelot/.idea/**/workspace.xml
-challenge_ocelot/.idea/**/tasks.xml
-challenge_ocelot/.idea/dictionaries
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
 
 # Sensitive or high-churn files:
-challenge_ocelot/.idea/**/dataSources/
-challenge_ocelot/.idea/**/dataSources.ids
-challenge_ocelot/.idea/**/dataSources.xml
-challenge_ocelot/.idea/**/dataSources.local.xml
-challenge_ocelot/.idea/**/sqlDataSources.xml
-challenge_ocelot/.idea/**/dynamic.xml
-challenge_ocelot/.idea/**/uiDesigner.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
 
 # Gradle:
-challenge_ocelot/.idea/**/gradle.xml
-challenge_ocelot/.idea/**/libraries
+.idea/**/gradle.xml
+.idea/**/libraries
 
 # CMake
 cmake-build-debug/
@@ -330,5 +330,5 @@ challenge_ocelot/media/
 .pytest_cache/
 .ipython/
 challenge_ocelot/.env
-challenge_ocelot/.envs/*
+.envs/*
 !.envs/.local/

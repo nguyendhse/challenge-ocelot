@@ -9,8 +9,8 @@ volumes:
 services:
   django:
     build:
-      context: .
-      dockerfile: ./compose/production/django/Dockerfile
+      context: challenge_ocelot
+      dockerfile: compose/production/django/Dockerfile
 
     image: challenge_ocelot_production_django
     volumes:
@@ -19,25 +19,25 @@ services:
       - postgres
       - redis
     env_file:
-      - ./.envs/.production/.django
-      - ./.envs/.production/.postgres
+      - .envs/.production/.django
+      - .envs/.production/.postgres
     command: /start
 
   postgres:
     build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
+      context: challenge_ocelot
+      dockerfile: compose/production/postgres/Dockerfile
     image: challenge_ocelot_production_postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
     env_file:
-      - ./.envs/.production/.postgres
+      - .envs/.production/.postgres
 
   traefik:
     build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
+      context: challenge_ocelot
+      dockerfile: compose/production/traefik/Dockerfile
     image: challenge_ocelot_production_traefik
     depends_on:
       - django
@@ -52,8 +52,8 @@ services:
 
   nginx:
     build:
-      context: .
-      dockerfile: ./compose/production/nginx/Dockerfile
+      context: challenge_ocelot
+      dockerfile: compose/production/nginx/Dockerfile
     image: challenge_ocelot_local_nginx
     depends_on:
       - django

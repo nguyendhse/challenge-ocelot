@@ -81,6 +81,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "apps.books",
     "apps.users",
     # Your stuff: custom apps go here
 ]

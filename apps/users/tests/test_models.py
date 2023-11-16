@@ -1,4 +1,4 @@
-from challenge_ocelot.apps.users.models import User
+from apps.users.models import User
 
 
 def test_user_get_absolute_url(user: User):
