@@ -81,7 +81,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "challenge_ocelot.users",
+    "apps.users",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -184,7 +184,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "challenge_ocelot.users.context_processors.allauth_settings",
+                "apps.users.context_processors.allauth_settings",
             ],
         },
     }

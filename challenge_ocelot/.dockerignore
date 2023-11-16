@@ -1,6 +1,6 @@
 .editorconfig
 .gitattributes
-.github
+../.github
 .gitignore
 .gitlab-ci.yml
 .idea
