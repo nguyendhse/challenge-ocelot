@@ -2,8 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.users.models import User
-
+from apps.books.managers import BookManager
 
 def book_cover_directory_path(instance, filename):
     return "book_covers/{0}/{1}".format(instance.book.id, filename)
@@ -25,7 +24,11 @@ class Book(models.Model):
     created_by = models.ForeignKey(get_user_model(), verbose_name=_("Created by User"), on_delete=models.CASCADE)
     is_active = models.BooleanField(_("Is active"), default=True)
 
+    objects = BookManager()
+
 
 class BookCover(models.Model):
+    # mimetype_validator = MimetypeValidator(['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/bmp'])
+
     book = models.ForeignKey("Book", related_name="book_covers", on_delete=models.CASCADE)
-    file = models.FileField(upload_to=book_cover_directory_path)
+    file = models.FileField(upload_to=book_cover_directory_path,)
