@@ -49,7 +49,6 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("MAX_DB_CONNECTIONS", default=None)  # noqa: F405
 DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
-
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -139,12 +138,15 @@ MIDDLEWARE = [
     # "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    'django.middleware.cache.UpdateCacheMiddleware',
     "django.middleware.common.CommonMiddleware",
+    'django.middleware.cache.FetchFromCacheMiddleware',
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # "allauth.account.middleware.AccountMiddleware",
+
 ]
 
 # STATIC
@@ -307,3 +309,7 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 DJANGO_ALLOW_ASYNC_UNSAFE = True
 SESSION_COOKIE_SAMESITE = 'strict'
+
+CACHE_MIDDLEWARE_ALIAS = 'default'  # cache alias
+CACHE_MIDDLEWARE_SECONDS = 30  # number of seconds each page should be cached.
+CACHE_MIDDLEWARE_KEY_PREFIX = 'cached-page'  # name of site if multiple sites are used
