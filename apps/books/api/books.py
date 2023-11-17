@@ -2,18 +2,25 @@ from typing import List
 
 from asgiref.sync import sync_to_async
 from django.http import Http404, JsonResponse
+from django.views.decorators.cache import cache_page
 from ninja import Router, Query, File
+from ninja.errors import ValidationError
 from ninja.security import django_auth
 from ninja.files import UploadedFile
-from ninja_extra.exceptions import ValidationError, ErrorDetail
+import ratelimit
 
 from apps.books.models import Book, Author, BookCover
 from apps.books.schemas import AuthorFilters, BookInSchema, BookSchema, BookFilters, BookCoverInSchema
 
 router = Router(tags=['Books'], )
 
+API_RATE_LIMIT = "1010/s"
+CACHE_TIMEOUT = 60 * 15
 
+
+@cache_page(CACHE_TIMEOUT)
 @router.get("", response=List[BookSchema])  # noqa
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def list_books(request, filters: BookFilters = Query(...)):
     _filter = filters.get_filter_expression()
     qs = await sync_to_async(Book.objects.filter)(_filter)
@@ -21,6 +28,7 @@ async def list_books(request, filters: BookFilters = Query(...)):
 
 
 @router.post("", response=BookSchema, auth=django_auth)
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def create_book(request, data: BookInSchema):
     payload_dict = data.dict()
     authors = payload_dict.pop('authors') if 'authors' in payload_dict else []
@@ -30,15 +38,18 @@ async def create_book(request, data: BookInSchema):
     return book
 
 
+@cache_page(CACHE_TIMEOUT)
 @router.get("{id}", response=BookSchema)
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def retrieve_book(request, id: int):
-    book = await Book.objects.filter(pk=id).afirst()
+    book = await Book.objects.filter(pk=id).select_related('created_by').afirst()
     if not book:
         raise Http404(f"Book id {id} Not found")
     return book
 
 
 @router.post("{id}/cover/", response=BookSchema)
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def upload_book_cover(request, id: int, file_cover: UploadedFile = File(...)):
     if not file_cover.content_type.startswith('image/'):
         raise ValidationError('Please provide an image (.jpg, .jpeg, .png, .gif, .bmp).')
@@ -51,6 +62,7 @@ async def upload_book_cover(request, id: int, file_cover: UploadedFile = File(..
 
 
 @router.put("{id}", response=BookSchema, auth=django_auth)
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def update_book(request, id: int, data: BookInSchema):
     payload_dict = data.dict()
 
@@ -67,6 +79,7 @@ async def update_book(request, id: int, data: BookInSchema):
 
 
 @router.delete("{id}", response=BookSchema, auth=django_auth)
+@ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def delete_book(request, id: int):
     book = await Book.objects.filter(pk=id).afirst()
     if not book:

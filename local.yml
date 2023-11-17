@@ -33,7 +33,14 @@ services:
       - challenge_ocelot_local_postgres_data_backups:/backups
     env_file:
       - .envs/.local/.postgres
-
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    env_file:
+      - .envs/.local/.postgres
+    environment:
+      DATABASE_URL: "${POSTGRES_DATABASE_URL}-postgresql://debug:debug@postgres:5432/challenge_ocelot"
+    depends_on:
+      - postgres
   docs:
     image: challenge_ocelot_local_docs
     container_name: challenge_ocelot_local_docs

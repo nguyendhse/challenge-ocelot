@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from ninja import Router, Form
-from ninja_extra.exceptions import ValidationError
+from ninja.errors import ValidationError
 
 from apps.users.schemas import RegistrationSchema, UserRetrieveSchema
 
@@ -12,7 +12,7 @@ User = get_user_model()
 @router.post('/register', response=UserRetrieveSchema)
 async def register(request, payload: RegistrationSchema):
     if payload.password1 != payload.password2:
-        raise ValidationError('Passwords do not match')
+        raise ValidationError(['Passwords do not match'])
     if User.objects.filter(username=payload.username).exists():
         raise ValidationError('Username already taken')
 
