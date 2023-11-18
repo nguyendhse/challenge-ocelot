@@ -1,17 +1,17 @@
-from typing import List
-
 from asgiref.sync import sync_to_async
 from django.http import Http404, JsonResponse
-from ninja import Router, Query
+from ninja import Query, Router
 from ninja.security import django_auth
 
 from apps.books.models import Author
-from apps.books.schemas import AuthorSchema, AuthorFilters, AuthorInSchema
+from apps.books.schemas import AuthorFilters, AuthorInSchema, AuthorSchema
 
-router = Router(tags=['Authors'], )
+router = Router(
+    tags=["Authors"],
+)
 
 
-@router.get("", response=List[AuthorSchema])
+@router.get("", response=list[AuthorSchema])
 async def list_authors(request, filters: AuthorFilters = Query(...)):
     _filter = filters.get_filter_expression()
     qs = await sync_to_async(Author.objects.filter)(_filter)
@@ -51,4 +51,4 @@ async def delete_author(request, id: int):
         raise Http404(f"Author id {id} Not found")
 
     author.delete()
-    return JsonResponse({'status': 'success'}, status=200)
+    return JsonResponse({"status": "success"}, status=200)

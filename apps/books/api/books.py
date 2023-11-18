@@ -1,25 +1,25 @@
-from typing import List
-
+import ratelimit
 from asgiref.sync import sync_to_async
 from django.http import Http404, JsonResponse
-from django.views.decorators.cache import cache_page
-from ninja import Router, Query, File
+
+# from django.views.decorators.cache import cache_page
+from ninja import File, Query, Router
 from ninja.errors import ValidationError
-from ninja.security import django_auth
 from ninja.files import UploadedFile
-import ratelimit
+from ninja.security import django_auth
 
-from apps.books.models import Book, Author, BookCover
-from apps.books.schemas import AuthorFilters, BookInSchema, BookSchema, BookFilters, BookCoverInSchema
+from apps.books.models import Author, Book, BookCover
+from apps.books.schemas import BookFilters, BookInSchema, BookSchema
 
-router = Router(tags=['Books'], )
+router = Router(
+    tags=["Books"],
+)
 
 API_RATE_LIMIT = "1010/s"
 CACHE_TIMEOUT = 60 * 15
 
 
-@cache_page(CACHE_TIMEOUT)
-@router.get("", response=List[BookSchema])  # noqa
+@router.get("", response=list[BookSchema])  # noqa
 @ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def list_books(request, filters: BookFilters = Query(...)):
     _filter = filters.get_filter_expression()
@@ -31,18 +31,17 @@ async def list_books(request, filters: BookFilters = Query(...)):
 @ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def create_book(request, data: BookInSchema):
     payload_dict = data.dict()
-    authors = payload_dict.pop('authors') if 'authors' in payload_dict else []
+    authors = payload_dict.pop("authors") if "authors" in payload_dict else []
     book = await Book.objects.acreate(**payload_dict, created_by_id=request.user.id)
     authors = [author async for author in Author.objects.filter(pk__in=authors)]
     book.authors.add(*authors)
     return book
 
 
-@cache_page(CACHE_TIMEOUT)
 @router.get("{id}", response=BookSchema)
 @ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def retrieve_book(request, id: int):
-    book = await Book.objects.filter(pk=id).select_related('created_by').afirst()
+    book = await Book.objects.filter(pk=id).select_related("created_by").afirst()
     if not book:
         raise Http404(f"Book id {id} Not found")
     return book
@@ -51,8 +50,8 @@ async def retrieve_book(request, id: int):
 @router.post("{id}/cover/", response=BookSchema)
 @ratelimit.decorate(key="ip", rate=API_RATE_LIMIT, block=True)
 async def upload_book_cover(request, id: int, file_cover: UploadedFile = File(...)):
-    if not file_cover.content_type.startswith('image/'):
-        raise ValidationError('Please provide an image (.jpg, .jpeg, .png, .gif, .bmp).')
+    if not file_cover.content_type.startswith("image/"):
+        raise ValidationError("Please provide an image (.jpg, .jpeg, .png, .gif, .bmp).")
     book = await Book.objects.filter(pk=id).afirst()
     if not book:
         raise Http404(f"Book id {id} Not found")
@@ -69,7 +68,7 @@ async def update_book(request, id: int, data: BookInSchema):
     book = await Book.objects.filter(pk=id).afirst()
     if not book:
         raise Http404(f"Book id {id} Not found")
-    authors = payload_dict.pop('authors') if 'authors' in payload_dict else []
+    authors = payload_dict.pop("authors") if "authors" in payload_dict else []
     authors = [author async for author in Author.objects.filter(pk__in=authors)]
 
     for attr, value in payload_dict.items():
@@ -86,4 +85,4 @@ async def delete_book(request, id: int):
         raise Http404(f"Book id {id} Not found")
 
     book.delete()
-    return JsonResponse({'status': 'success'}, status=200)
+    return JsonResponse({"status": "success"}, status=200)

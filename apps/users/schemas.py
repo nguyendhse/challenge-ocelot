@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.contrib.auth import get_user_model
 from ninja import ModelSchema, Schema
 
@@ -14,5 +12,5 @@ class RegistrationSchema(Schema):
     username: str
     password1: str
     password2: str
-    email: Optional[str]
-    name: Optional[str]
+    email: str | None
+    name: str | None
