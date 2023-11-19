@@ -81,6 +81,7 @@ Godspeed! ;)
 
 ![d1.png](documents%2Fimages%2Fd1.png)
 
+
 ### Technical choices
 - Webserver: Uvicorn ASGI
 - Django 4.2: 
@@ -95,6 +96,22 @@ I chose to implement async APIs for better scalability and responsiveness. Async
 
 ![ab.png](documents%2Fimages%2Fab.png)
 The server load is quite good, achieving a throughput of 1,343 requests per second.
+
+
+### Setup and run local
+
+Require Docker, Docker Compose
+
+Run following commands:
+```shell
+git clone https://github.com/nguyendhse/challenge-ocelot.git
+cd challenge-ocelot
+
+docker compose -f local.yml up -d
+```
+You can custom some environments variable inside `.envs/.local/.django` and `.envs/.local/.postgres`
+
+After up the project successful, lets play on browser at: http://localhost:8000/api/docs
 
 ## Testing
 
