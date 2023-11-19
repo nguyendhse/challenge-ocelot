@@ -5,6 +5,8 @@
 Develop a RESTful API using Django or FastAPI framework that manages a simple "Bookstore". Your API will provide endpoints to create, read, update, and delete books in the store. Include functionality to handle user authentication to allow only registered users to modify the bookstore content.
 
 ## Requirements:
+<details>
+
 
 ### API Functionality:
 
@@ -69,3 +71,27 @@ Develop a RESTful API using Django or FastAPI framework that manages a simple "B
 Any questions you may have, please contact us by e-mail.
 
 Godspeed! ;)
+
+  <summary>Click to view requirements</summary>
+
+</details>
+
+
+## System Diagram
+
+![d1.png](documents%2Fimages%2Fd1.png)
+
+### Technical choices
+- Webserver: Uvicorn ASGI
+- Django 4.2: 
+  - django-ninja: framework to building the APIs, Fast, Async-ready, heavily inspired by FastAPI 
+- PG Bouncer: connection pooler for PostgreSQL, managing efficient database connections, reducing overhead, and providing features like load balancing and connection limits for improved performance.
+- PostgresSQL: Open-source relational database management system.
+
+I chose to implement async APIs for better scalability and responsiveness. Async allows efficient handling of concurrent requests, ensuring improved performance in handling a large number of operations simultaneously.  
+
+
+#### Benchmark API with 20 concurrent clients, and send total 5000 GET requests 
+
+![ab.png](documents%2Fimages%2Fab.png)
+The server load is quite good, achieving a throughput of 1,343 requests per second.

@@ -43,18 +43,4 @@ services:
       DATABASE_URL: "${POSTGRES_DATABASE_URL}-postgresql://debug:debug@postgres:5432/challenge_ocelot"
     depends_on:
       - postgres
-  docs:
-    image: challenge_ocelot_local_docs
-    container_name: challenge_ocelot_local_docs
-    build:
-      context: .
-      dockerfile: compose/local/docs/Dockerfile
-    env_file:
-      - .envs/.local/.django
-    volumes:
-      - ./docs:/docs:z
-      - ./config:/app/config:z
-      - ./challenge_ocelot:/app/challenge_ocelot:z
-    ports:
-      - '9000:9000'
-    command: /start-docs
+
