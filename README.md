@@ -95,3 +95,14 @@ I chose to implement async APIs for better scalability and responsiveness. Async
 
 ![ab.png](documents%2Fimages%2Fab.png)
 The server load is quite good, achieving a throughput of 1,343 requests per second.
+
+## Testing
+
+### Open API: http://51.79.248.178:8000/api/openapi.json
+### Swagger UI: http://51.79.248.178:8000/api/docs
+
+- Demo account:
+    - Username: admin
+    - Password: admin
+
+  You can use this account to login via API `/auth/login` or register a new account to yourself
