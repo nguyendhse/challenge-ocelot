@@ -84,8 +84,13 @@ Godspeed! ;)
 
 ### Technical choices
 - Webserver: Uvicorn ASGI
-- Django 4.2: 
-  - django-ninja: framework to building the APIs, Fast, Async-ready, heavily inspired by FastAPI 
+- Django 4.2:
+  - django-cookie-cutter: a project starter.
+    - Document: https://cookiecutter-django.readthedocs.io/en/latest/ 
+  - django-ninja: framework to building the APIs, Fast, Async-ready, heavily inspired by FastAPI
+    - Document: https://django-ninja.dev/
+  - Others:
+    - django-fast-ratelimit, django-ninja-auth
 - PG Bouncer: connection pooler for PostgreSQL, managing efficient database connections, reducing overhead, and providing features like load balancing and connection limits for improved performance.
 - PostgresSQL: Open-source relational database management system.
 
